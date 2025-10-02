@@ -6,7 +6,7 @@
     <title>E3CLIPSE3大人的游戏合集</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="poker-style.css">
-    <link rel="stylesheet" href="poker-carousel.css">
+    <link rel="stylesheet" href="poker-original.css">
 </head>
 <body>
     <!-- P3R风格开场动画 -->
@@ -93,7 +93,25 @@
                 </div>
                 
                 <div class="poker-carousel-container">
-                    <!-- 扑克牌卡片将由JavaScript动态生成 -->
+                    <!-- 扑克牌轮播效果 -->
+                    <div class="container">
+                        <div class="poker poker1">
+                            <img src="./original-project/photos/photo (4).webp" />
+                        </div>
+                        <div class="poker poker2">
+                            <img src="./original-project/photos/photo (3).webp" />
+                        </div>
+                        <div class="poker poker3">
+                            <img src="./original-project/photos/photo (2).webp" />
+                        </div>
+                        <div class="poker poker4">
+                            <img src="./original-project/photos/photo (1).webp" />
+                        </div>
+                        <div class="poker poker5">
+                            <img src="./original-project/photos/photo (0).webp" />
+                        </div>
+                        <div class="poker_top poker5" onclick="poker.move()"></div>
+                    </div>
                 </div>
             </div>
             
@@ -325,7 +343,7 @@
     <script src="start.js"></script>
     
     <!-- 扑克牌轮播效果 -->
-    <script src="poker-carousel.js"></script>
+    <script src="poker-original.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {

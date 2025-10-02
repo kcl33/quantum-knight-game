@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扑克牌风格游戏卡片 - 改进版</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 扑克牌样式 - 改进版 */
+        .poker-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0d0d23, #1a1a3a);
+            overflow: hidden;
+        }
+
+        .poker-deck {
+            position: relative;
+            width: 70rem;
+            height: 40rem;
+            perspective: 1500px;
+        }
+
+        .poker-card {
+            position: absolute;
+            width: 22rem;
+            height: 32rem;
+            border-radius: 1.2rem;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border: 0.2rem solid #78ffd6;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.6),
+                inset 0 0 25px rgba(120, 255, 214, 0.3);
+            transform-origin: bottom center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            backface-visibility: hidden;
+        }
+
+        .poker-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(120, 255, 214, 0.15), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .poker-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 45deg, transparent, rgba(120, 255, 214, 0.1), transparent 90deg);
+            animation: hologram-rotate 12s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @keyframes hologram-rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .poker-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 
+                0 20px 45px rgba(0, 0, 0, 0.7),
+                0 0 40px rgba(120, 255, 214, 0.5),
+                inset 0 0 30px rgba(120, 255, 214, 0.4);
+            border-color: #78ffd6;
+        }
+
+        .poker-card.active {
+            z-index: 10;
+            transform: translateY(-10px) scale(1.03);
+        }
+
+        .poker-card-header {
+            padding: 1.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 0.15rem solid rgba(120, 255, 214, 0.4);
+            z-index: 3;
+            position: relative;
+        }
+
+        .poker-card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #78ffd6;
+            margin-bottom: 0.6rem;
+            text-shadow: 0 0 15px rgba(120, 255, 214, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .poker-card-genre {
+            font-size: 1.1rem;
+            color: #a0d2ff;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .poker-card-body {
+            flex: 1;
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 3;
+            position: relative;
+        }
+
+        .poker-card-image {
+            width: 100%;
+            height: 14rem;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.8rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .poker-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.8rem;
+            transition: transform 0.5s ease;
+        }
+
+        .poker-card:hover .poker-card-image img {
+            transform: scale(1.05);
+        }
+
+        .poker-card-icon {
+            position: absolute;
+            font-size: 5.5rem;
+            color: rgba(120, 255, 214, 0.8);
+            filter: drop-shadow(0 0 20px rgba(120, 255, 214, 0.9));
+            z-index: 2;
+        }
+
+        .poker-card-description {
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            opacity: 0.95;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .poker-card-footer {
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-top: 0.15rem solid rgba(120, 255, 214, 0.4);
+            z-index: 3;
+            position: relative;
+        }
+
+        .poker-card-stats {
+            color: #ffeb3b;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 扑克牌位置 - 改进版 */
+        .poker1 {
+            transform: rotate(-12deg) translateX(-180%) scale(0.9);
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .poker2 {
+            transform: rotate(-7deg) translateX(-90%) scale(0.95);
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .poker3 {
+            transform: rotate(0deg) translateX(0) scale(1);
+            z-index: 3;
+            opacity: 1;
+        }
+
+        .poker4 {
+            transform: rotate(7deg) translateX(90%) scale(0.95);
+            z-index: 2;
+            opacity: 0.9;
+        }
+
+        .poker5 {
+            transform: rotate(12deg) translateX(180%) scale(0.9);
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        /* 扑克牌顶部可点击区域 */
+        .poker-top {
+            position: absolute;
+            width: 22rem;
+            height: 6rem;
+            background: rgba(120, 255, 214, 0.15);
+            border: 0.15rem solid rgba(120, 255, 214, 0.4);
+            border-radius: 1.2rem 1.2rem 0 0;
+            transform-origin: bottom center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .poker-top:hover {
+            background: rgba(120, 255, 214, 0.25);
+            border-color: #78ffd6;
+            box-shadow: 0 0 20px rgba(120, 255, 214, 0.5);
+        }
+
+        .poker-top.poker5 {
+            transform: rotate(12deg) translateX(180%) scale(0.9);
+        }
+
+        /* 导航按钮 - 改进版 */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4rem;
+            height: 4rem;
+            background: rgba(120, 255, 214, 0.2);
+            border: 0.15rem solid #78ffd6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-button:hover {
+            background: rgba(120, 255, 214, 0.4);
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 0 25px rgba(120, 255, 214, 0.6);
+        }
+
+        .nav-button.prev {
+            left: 3rem;
+        }
+
+        .nav-button.next {
+            right: 3rem;
+        }
+
+        .nav-button::before {
+            content: '';
+            width: 1.2rem;
+            height: 1.2rem;
+            border-top: 0.25rem solid #78ffd6;
+            border-right: 0.25rem solid #78ffd6;
+        }
+
+        .nav-button.prev::before {
+            transform: rotate(-135deg);
+            margin-left: 0.4rem;
+        }
+
+        .nav-button.next::before {
+            transform: rotate(45deg);
+            margin-right: 0.4rem;
+        }
+
+        /* 标题 - 改进版 */
+        .poker-title {
+            position: absolute;
+            top: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            font-weight: bold;
+            color: #78ffd6;
+            text-shadow: 0 0 25px rgba(120, 255, 214, 0.7);
+            z-index: 100;
+            letter-spacing: 2px;
+        }
+
+        /* 返回按钮 - 改进版 */
+        .back-button {
+            position: absolute;
+            top: 2.5rem;
+            left: 2.5rem;
+            padding: 1rem 2rem;
+            background: rgba(120, 255, 214, 0.2);
+            border: 0.15rem solid #78ffd6;
+            border-radius: 2.5rem;
+            color: #78ffd6;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            font-size: 1.1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-button:hover {
+            background: rgba(120, 255, 214, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 自动播放控制 */
+        .autoplay-control {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .autoplay-toggle {
+            padding: 0.8rem 1.5rem;
+            background: rgba(120, 255, 214, 0.2);
+            border: 0.15rem solid #78ffd6;
+            border-radius: 2rem;
+            color: #78ffd6;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .autoplay-toggle:hover {
+            background: rgba(120, 255, 214, 0.4);
+        }
+
+        .autoplay-toggle.active {
+            background: rgba(120, 255, 214, 0.4);
+            box-shadow: 0 0 15px rgba(120, 255, 214, 0.5);
+        }
+
+        /* 响应式设计 - 改进版 */
+        @media (max-width: 1400px) {
+            .poker-deck {
+                width: 60rem;
+                height: 35rem;
+            }
+
+            .poker-card, .poker-top {
+                width: 20rem;
+                height: 28rem;
+            }
+
+            .poker1 {
+                transform: rotate(-12deg) translateX(-150%) scale(0.9);
+            }
+
+            .poker2 {
+                transform: rotate(-7deg) translateX(-75%) scale(0.95);
+            }
+
+            .poker4 {
+                transform: rotate(7deg) translateX(75%) scale(0.95);
+            }
+
+            .poker5 {
+                transform: rotate(12deg) translateX(150%) scale(0.9);
+            }
+
+            .poker-top.poker5 {
+                transform: rotate(12deg) translateX(150%) scale(0.9);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .poker-deck {
+                width: 50rem;
+                height: 30rem;
+            }
+
+            .poker-card, .poker-top {
+                width: 18rem;
+                height: 25rem;
+            }
+
+            .poker-card-title {
+                font-size: 1.8rem;
+            }
+
+            .poker-card-description {
+                font-size: 1rem;
+            }
+
+            .poker-card-image {
+                height: 12rem;
+            }
+
+            .poker-card-icon {
+                font-size: 4.5rem;
+            }
+
+            .poker1 {
+                transform: rotate(-12deg) translateX(-130%) scale(0.9);
+            }
+
+            .poker2 {
+                transform: rotate(-7deg) translateX(-65%) scale(0.95);
+            }
+
+            .poker4 {
+                transform: rotate(7deg) translateX(65%) scale(0.95);
+            }
+
+            .poker5 {
+                transform: rotate(12deg) translateX(130%) scale(0.9);
+            }
+
+            .poker-top.poker5 {
+                transform: rotate(12deg) translateX(130%) scale(0.9);
+            }
+
+            .poker-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .poker-deck {
+                width: 40rem;
+                height: 25rem;
+            }
+
+            .poker-card, .poker-top {
+                width: 16rem;
+                height: 22rem;
+            }
+
+            .poker-card-title {
+                font-size: 1.6rem;
+            }
+
+            .poker-card-description {
+                font-size: 0.9rem;
+            }
+
+            .poker-card-image {
+                height: 10rem;
+            }
+
+            .poker-card-icon {
+                font-size: 4rem;
+            }
+
+            .poker1 {
+                transform: rotate(-12deg) translateX(-110%) scale(0.9);
+            }
+
+            .poker2 {
+                transform: rotate(-7deg) translateX(-55%) scale(0.95);
+            }
+
+            .poker4 {
+                transform: rotate(7deg) translateX(55%) scale(0.95);
+            }
+
+            .poker5 {
+                transform: rotate(12deg) translateX(110%) scale(0.9);
+            }
+
+            .poker-top.poker5 {
+                transform: rotate(12deg) translateX(110%) scale(0.9);
+            }
+
+            .poker-title {
+                font-size: 2.2rem;
+            }
+
+            .nav-button {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+
+            .nav-button.prev {
+                left: 2rem;
+            }
+
+            .nav-button.next {
+                right: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .poker-deck {
+                width: 30rem;
+                height: 20rem;
+            }
+
+            .poker-card, .poker-top {
+                width: 14rem;
+                height: 19rem;
+            }
+
+            .poker-card-title {
+                font-size: 1.4rem;
+            }
+
+            .poker-card-description {
+                font-size: 0.85rem;
+            }
+
+            .poker-card-image {
+                height: 8rem;
+            }
+
+            .poker-card-icon {
+                font-size: 3.5rem;
+            }
+
+            .poker1 {
+                transform: rotate(-12deg) translateX(-90%) scale(0.9);
+            }
+
+            .poker2 {
+                transform: rotate(-7deg) translateX(-45%) scale(0.95);
+            }
+
+            .poker4 {
+                transform: rotate(7deg) translateX(45%) scale(0.95);
+            }
+
+            .poker5 {
+                transform: rotate(12deg) translateX(90%) scale(0.9);
+            }
+
+            .poker-top.poker5 {
+                transform: rotate(12deg) translateX(90%) scale(0.9);
+            }
+
+            .poker-title {
+                font-size: 2rem;
+            }
+
+            .back-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .nav-button {
+                width: 3rem;
+                height: 3rem;
+            }
+
+            .nav-button.prev {
+                left: 1.5rem;
+            }
+
+            .nav-button.next {
+                right: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .poker-deck {
+                width: 25rem;
+                height: 17rem;
+            }
+
+            .poker-card, .poker-top {
+                width: 12rem;
+                height: 16rem;
+            }
+
+            .poker-card-title {
+                font-size: 1.2rem;
+            }
+
+            .poker-card-description {
+                font-size: 0.8rem;
+            }
+
+            .poker-card-image {
+                height: 7rem;
+            }
+
+            .poker-card-icon {
+                font-size: 3rem;
+            }
+
+            .poker1 {
+                transform: rotate(-12deg) translateX(-70%) scale(0.9);
+            }
+
+            .poker2 {
+                transform: rotate(-7deg) translateX(-35%) scale(0.95);
+            }
+
+            .poker4 {
+                transform: rotate(7deg) translateX(35%) scale(0.95);
+            }
+
+            .poker5 {
+                transform: rotate(12deg) translateX(70%) scale(0.9);
+            }
+
+            .poker-top.poker5 {
+                transform: rotate(12deg) translateX(70%) scale(0.9);
+            }
+
+            .poker-title {
+                font-size: 1.8rem;
+            }
+
+            .back-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-button {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            .nav-button.prev {
+                left: 1rem;
+            }
+
+            .nav-button.next {
+                right: 1rem;
+            }
+
+            .autoplay-control {
+                bottom: 1.5rem;
+            }
+
+            .autoplay-toggle {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="poker-container">
+        <h1 class="poker-title">游戏选择</h1>
+        <button class="back-button" onclick="location.href='index.html'">返回</button>
+        
+        <div class="nav-button prev" onclick="pokerGames.prev()"></div>
+        <div class="nav-button next" onclick="pokerGames.next()"></div>
+        
+        <div class="poker-deck">
+            <div class="poker-card poker1" onclick="location.href='snake.html'">
+                <div class="poker-card-header">
+                    <h2 class="poker-card-title">贪吃蛇</h2>
+                    <div class="poker-card-genre">经典街机</div>
+                </div>
+                <div class="poker-card-body">
+                    <div class="poker-card-image">
+                        <img src="素材库/图片/扑克牌轮播图/photo (4).webp" alt="贪吃蛇游戏">
+                        <div class="poker-card-icon">🐍</div>
+                    </div>
+                    <div class="poker-card-description">
+                        控制小蛇吃食物并成长，避免撞到墙壁或自己的身体。经典游戏，简单上瘾！
+                    </div>
+                </div>
+                <div class="poker-card-footer">
+                    <div class="poker-card-stats">难度: ★★★☆☆ | 热度: 98%</div>
+                </div>
+            </div>
+            
+            <div class="poker-card poker2" onclick="location.href='tetris.html'">
+                <div class="poker-card-header">
+                    <h2 class="poker-card-title">俄罗斯方块</h2>
+                    <div class="poker-card-genre">益智解谜</div>
+                </div>
+                <div class="poker-card-body">
+                    <div class="poker-card-image">
+                        <img src="素材库/图片/扑克牌轮播图/photo (3).webp" alt="俄罗斯方块游戏">
+                        <div class="poker-card-icon">🧩</div>
+                    </div>
+                    <div class="poker-card-description">
+                        旋转和移动不同形状的方块，填满一行即可消除。考验反应和策略的益智游戏！
+                    </div>
+                </div>
+                <div class="poker-card-footer">
+                    <div class="poker-card-stats">难度: ★★★★☆ | 热度: 95%</div>
+                </div>
+            </div>
+            
+            <div class="poker-card poker3" onclick="location.href='knight.html'">
+                <div class="poker-card-header">
+                    <h2 class="poker-card-title">骑士</h2>
+                    <div class="poker-card-genre">动作冒险</div>
+                </div>
+                <div class="poker-card-body">
+                    <div class="poker-card-image">
+                        <img src="素材库/图片/扑克牌轮播图/photo (2).webp" alt="骑士游戏">
+                        <div class="poker-card-icon">⚔️</div>
+                    </div>
+                    <div class="poker-card-description">
+                        扮演骑士，探索神秘世界，收集能量，击败敌人，拯救王国！
+                    </div>
+                </div>
+                <div class="poker-card-footer">
+                    <div class="poker-card-stats">难度: ★★★★★ | 热度: 99%</div>
+                </div>
+            </div>
+            
+            <div class="poker-card poker4" onclick="location.href='snake.html'">
+                <div class="poker-card-header">
+                    <h2 class="poker-card-title">贪吃蛇</h2>
+                    <div class="poker-card-genre">经典街机</div>
+                </div>
+                <div class="poker-card-body">
+                    <div class="poker-card-image">
+                        <img src="素材库/图片/扑克牌轮播图/photo (1).webp" alt="贪吃蛇游戏">
+                        <div class="poker-card-icon">🐍</div>
+                    </div>
+                    <div class="poker-card-description">
+                        控制小蛇吃食物并成长，避免撞到墙壁或自己的身体。经典游戏，简单上瘾！
+                    </div>
+                </div>
+                <div class="poker-card-footer">
+                    <div class="poker-card-stats">难度: ★★★☆☆ | 热度: 98%</div>
+                </div>
+            </div>
+            
+            <div class="poker-card poker5" onclick="location.href='tetris.html'">
+                <div class="poker-card-header">
+                    <h2 class="poker-card-title">俄罗斯方块</h2>
+                    <div class="poker-card-genre">益智解谜</div>
+                </div>
+                <div class="poker-card-body">
+                    <div class="poker-card-image">
+                        <img src="素材库/图片/扑克牌轮播图/photo (0).webp" alt="俄罗斯方块游戏">
+                        <div class="poker-card-icon">🧩</div>
+                    </div>
+                    <div class="poker-card-description">
+                        旋转和移动不同形状的方块，填满一行即可消除。考验反应和策略的益智游戏！
+                    </div>
+                </div>
+                <div class="poker-card-footer">
+                    <div class="poker-card-stats">难度: ★★★★☆ | 热度: 95%</div>
+                </div>
+            </div>
+            
+            <div class="poker-top poker5" onclick="pokerGames.next()"></div>
+        </div>
+        
+        <div class="autoplay-control">
+            <button class="autoplay-toggle" id="autoplayToggle" onclick="pokerGames.toggleAutoplay()">自动播放: 关</button>
+        </div>
+    </div>
+
+    <script>
+        // 扑克牌游戏卡片轮播逻辑 - 改进版
+        const pokerGames = {
+            cardElements: [],
+            topCard: null,
+            transformData: [
+                "rotate(-12deg) translateX(-180%) scale(0.9)",
+                "rotate(-7deg) translateX(-90%) scale(0.95)",
+                "rotate(0deg) translateX(0) scale(1)",
+                "rotate(7deg) translateX(90%) scale(0.95)",
+                "rotate(12deg) translateX(180%) scale(0.9)",
+            ],
+            currentIndex: 0,
+            autoplayInterval: null,
+            isAutoplay: false,
+            autoplayDelay: 5000, // 5秒自动切换
+            games: [
+                {
+                    title: "贪吃蛇",
+                    genre: "经典街机",
+                    icon: "🐍",
+                    description: "控制小蛇吃食物并成长，避免撞到墙壁或自己的身体。经典游戏，简单上瘾！",
+                    stats: "难度: ★★★☆☆ | 热度: 98%",
+                    link: "snake.html",
+                    image: "素材库/图片/扑克牌轮播图/photo (4).webp"
+                },
+                {
+                    title: "俄罗斯方块",
+                    genre: "益智解谜",
+                    icon: "🧩",
+                    description: "旋转和移动不同形状的方块，填满一行即可消除。考验反应和策略的益智游戏！",
+                    stats: "难度: ★★★★☆ | 热度: 95%",
+                    link: "tetris.html",
+                    image: "素材库/图片/扑克牌轮播图/photo (3).webp"
+                },
+                {
+                    title: "骑士",
+                    genre: "动作冒险",
+                    icon: "⚔️",
+                    description: "扮演骑士，探索神秘世界，收集能量，击败敌人，拯救王国！",
+                    stats: "难度: ★★★★★ | 热度: 99%",
+                    link: "knight.html",
+                    image: "素材库/图片/扑克牌轮播图/photo (2).webp"
+                }
+            ],
+            
+            init() {
+                this.cardElements = [...document.getElementsByClassName("poker-card")];
+                this.topCard = document.querySelector(".poker-top");
+                this.autoplayToggle = document.getElementById("autoplayToggle");
+                
+                this.cardElements.forEach((card, index) => {
+                    card.dataset.index = index;
+                });
+                
+                // 添加键盘控制
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        this.prev();
+                    } else if (e.key === 'ArrowRight') {
+                        this.next();
+                    } else if (e.key === ' ') {
+                        e.preventDefault();
+                        this.toggleAutoplay();
+                    }
+                });
+                
+                // 添加触摸滑动支持
+                let touchStartX = 0;
+                let touchEndX = 0;
+                
+                const pokerDeck = document.querySelector('.poker-deck');
+                
+                pokerDeck.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                });
+                
+                pokerDeck.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    this.handleSwipe();
+                });
+                
+                const handleSwipe = () => {
+                    if (touchEndX < touchStartX - 50) {
+                        this.next();
+                    }
+                    if (touchEndX > touchStartX + 50) {
+                        this.prev();
+                    }
+                };
+                
+                this.handleSwipe = handleSwipe.bind(this);
+            },
+            
+            next() {
+                this.move(1);
+                this.resetAutoplay();
+            },
+            
+            prev() {
+                this.move(-1);
+                this.resetAutoplay();
+            },
+            
+            move(direction) {
+                // 更新当前索引
+                this.currentIndex = (this.currentIndex + direction + this.games.length) % this.games.length;
+                
+                // 更新每张卡片的内容和位置
+                this.cardElements.forEach((card, index) => {
+                    // 计算游戏索引
+                    let gameIndex = (this.currentIndex + index) % this.games.length;
+                    
+                    // 更新卡片内容
+                    const game = this.games[gameIndex];
+                    card.onclick = () => location.href = game.link;
+                    
+                    const title = card.querySelector(".poker-card-title");
+                    const genre = card.querySelector(".poker-card-genre");
+                    const icon = card.querySelector(".poker-card-icon");
+                    const description = card.querySelector(".poker-card-description");
+                    const stats = card.querySelector(".poker-card-stats");
+                    const image = card.querySelector(".poker-card-image img");
+                    
+                    title.textContent = game.title;
+                    genre.textContent = game.genre;
+                    icon.textContent = game.icon;
+                    description.textContent = game.description;
+                    stats.textContent = game.stats;
+                    image.src = game.image;
+                    image.alt = game.title;
+                    
+                    // 更新卡片位置和样式
+                    card.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                    card.style.transform = this.transformData[index];
+                    
+                    // 更新z-index和透明度
+                    if (index === 2) { // 中间卡片
+                        card.style.zIndex = 10;
+                        card.style.opacity = 1;
+                        card.classList.add('active');
+                    } else if (index === 1 || index === 3) { // 两侧卡片
+                        card.style.zIndex = 5;
+                        card.style.opacity = 0.9;
+                        card.classList.remove('active');
+                    } else { // 最外侧卡片
+                        card.style.zIndex = 1;
+                        card.style.opacity = 0.8;
+                        card.classList.remove('active');
+                    }
+                });
+                
+                // 更新顶部可点击区域位置
+                this.topCard.style.transition = "transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                this.topCard.style.transform = this.transformData[4];
+            },
+            
+            toggleAutoplay() {
+                this.isAutoplay = !this.isAutoplay;
+                
+                if (this.isAutoplay) {
+                    this.startAutoplay();
+                    this.autoplayToggle.textContent = "自动播放: 开";
+                    this.autoplayToggle.classList.add('active');
+                } else {
+                    this.stopAutoplay();
+                    this.autoplayToggle.textContent = "自动播放: 关";
+                    this.autoplayToggle.classList.remove('active');
+                }
+            },
+            
+            startAutoplay() {
+                this.autoplayInterval = setInterval(() => {
+                    this.next();
+                }, this.autoplayDelay);
+            },
+            
+            stopAutoplay() {
+                if (this.autoplayInterval) {
+                    clearInterval(this.autoplayInterval);
+                    this.autoplayInterval = null;
+                }
+            },
+            
+            resetAutoplay() {
+                if (this.isAutoplay) {
+                    this.stopAutoplay();
+                    this.startAutoplay();
+                }
+            }
+        };
+        
+        // 初始化扑克牌游戏卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            pokerGames.init();
+        });
+    </script>
+</body>
+
+</html>
