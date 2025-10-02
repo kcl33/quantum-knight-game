@@ -534,7 +534,7 @@ body::before {
     width: 100%;
     min-height: 100vh;
     padding-top: 60px; /* 留出导航栏空间 */
-    background: var(--klein-blue-dark);
+    background: transparent;
 }
 
 .content-wrapper {
