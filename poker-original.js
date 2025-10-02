@@ -57,10 +57,8 @@ const poker = {
                 });
             }
             
-            // 初始化时只显示最后一张卡片（选择游戏卡片）
-            if (index !== 3) {
-                obj.style.display = 'none';
-            }
+            // 初始化时不显示任何卡片
+            obj.style.display = 'none';
         });
 
         this.game_index = this.poker_eles.length;

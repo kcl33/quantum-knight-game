@@ -286,13 +286,13 @@ class LoadingScreen {
             // 启动主菜单
             document.getElementById('mainMenu').style.display = 'flex';
             
-            // 确保只显示"选择游戏"卡片（索引为3的卡片）
+            // 加载完成后只显示"选择游戏"卡片（索引为3的卡片）
             const pokerElements = document.querySelectorAll('.poker');
             pokerElements.forEach((poker, index) => {
-                if (index !== 3) {
-                    poker.style.display = 'none';
-                } else {
+                if (index === 3) {
                     poker.style.display = 'block';
+                } else {
+                    poker.style.display = 'none';
                 }
             });
         }, 1000);
@@ -305,6 +305,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('mainMenu').style.display = 'none';
     document.getElementById('snakeGame').style.display = 'none';
     document.getElementById('tetrisGame').style.display = 'none';
+    
+    // 确保所有卡片在开场动画期间都不显示
+    const pokerElements = document.querySelectorAll('.poker');
+    pokerElements.forEach((poker) => {
+        poker.style.display = 'none';
+    });
     
     // 启动加载界面
     new LoadingScreen();
