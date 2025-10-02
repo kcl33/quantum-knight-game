@@ -74,6 +74,15 @@
         </div>
     </nav>
     
+    <!-- 公告栏 -->
+    <div class="announcement" id="gameAnnouncement">
+        <button class="announcement-close" id="closeAnnouncement">×</button>
+        <h3>🎮 游戏公告</h3>
+        <p>欢迎来到E3CLIPSE3大人的游戏合集！</p>
+        <p>目前包含贪吃蛇、俄罗斯方块和量子骑士三款游戏，更多精彩游戏敬请期待！</p>
+        <p>提示：使用右侧热键快速切换游戏，按ESC键可返回主菜单。</p>
+    </div>
+    
     <!-- 鼠标坐标跟随 -->
     <div class="mouse-coordinates" id="mouseCoords">0, 0</div>
     
@@ -374,6 +383,24 @@
                 
                 // 尝试加载视频
                 video.load();
+            }
+            
+            // 公告关闭功能
+            const closeAnnouncementBtn = document.getElementById('closeAnnouncement');
+            const announcement = document.getElementById('gameAnnouncement');
+            
+            if (closeAnnouncementBtn && announcement) {
+                closeAnnouncementBtn.addEventListener('click', function() {
+                    announcement.style.display = 'none';
+                    // 存储用户已关闭公告的状态
+                    localStorage.setItem('announcementClosed', 'true');
+                });
+                
+                // 检查用户是否已关闭公告
+                const announcementClosed = localStorage.getItem('announcementClosed');
+                if (announcementClosed === 'true') {
+                    announcement.style.display = 'none';
+                }
             }
         });
     </script>
