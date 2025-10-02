@@ -6,48 +6,48 @@ document.addEventListener('DOMContentLoaded', function() {
         games: [
             {
                 id: 'snake',
-                title: 'Snake Classic',
-                genre: 'Arcade • Classic',
+                title: '贪吃蛇经典',
+                genre: '街机 • 经典',
                 description: '经典贪吃蛇游戏，简单易上手的休闲娱乐',
                 icon: '🐍',
                 highScoreId: 'snakeHighScore'
             },
             {
                 id: 'tetris',
-                title: 'Tetris Master',
-                genre: 'Puzzle • Classic',
+                title: '俄罗斯方块大师',
+                genre: '益智 • 经典',
                 description: '经典俄罗斯方块，考验你的反应和策略',
                 icon: '🧩',
                 highScoreId: 'tetrisHighScore'
             },
             {
                 id: 'adventure',
-                title: 'Knight',
-                genre: 'Action • Adventure',
+                title: '骑士',
+                genre: '动作 • 冒险',
                 description: '横版动作冒险游戏，体验刺激的战斗与探索',
                 icon: '⚔️',
                 highScoreId: 'adventureHighScore'
             },
             {
                 id: 'puzzle',
-                title: 'Puzzle Quest',
-                genre: 'Puzzle • Adventure',
+                title: '解谜冒险',
+                genre: '益智 • 冒险',
                 description: '解谜冒险游戏，挑战你的智力与观察力',
                 icon: '🧩',
                 highScoreId: 'puzzleHighScore'
             },
             {
                 id: 'racing',
-                title: 'Speed Racer',
-                genre: 'Racing • Arcade',
+                title: '极速赛车',
+                genre: '竞速 • 街机',
                 description: '极速赛车游戏，体验速度与激情',
                 icon: '🏎️',
                 highScoreId: 'racingHighScore'
             },
             {
                 id: 'shooter',
-                title: 'Space Shooter',
-                genre: 'Shooter • Arcade',
+                title: '太空射击',
+                genre: '射击 • 街机',
                 description: '太空射击游戏，消灭外星入侵者',
                 icon: '🚀',
                 highScoreId: 'shooterHighScore'
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="poker-game-genre">${game.genre}</p>
                         <p class="poker-game-description">${game.description}</p>
                         <div class="poker-game-stats">
-                            High Score: <span id="${game.highScoreId}">0</span>
+                            最高分: <span id="${game.highScoreId}">0</span>
                         </div>
                     </div>
                 `;
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="poker-game-info">
                     <h3 class="poker-game-title">选择游戏</h3>
-                    <p class="poker-game-genre">Game Selection</p>
+                    <p class="poker-game-genre">游戏选择</p>
                     <p class="poker-game-description">点击左侧卡片切换游戏</p>
                     <div class="poker-game-stats">
                         点击选择
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 添加点击提示
             const hint = document.createElement('div');
             hint.className = 'poker-click-hint';
-            hint.textContent = '点击卡片切换游戏，点击中间卡片开始游戏';
+            hint.textContent = '点击左右卡片切换游戏，点击中间卡片开始游戏';
             container.appendChild(hint);
             
             // 添加键盘事件
@@ -293,15 +293,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'puzzle':
                     // 可以添加新的游戏
-                    alert('Puzzle Quest 游戏开发中...');
+                    alert('解谜冒险游戏 即将上线，敬请期待！');
                     break;
                 case 'racing':
                     // 可以添加新的游戏
-                    alert('Speed Racer 游戏开发中...');
+                    alert('极速赛车游戏 即将上线，敬请期待！');
                     break;
                 case 'shooter':
                     // 可以添加新的游戏
-                    alert('Space Shooter 游戏开发中...');
+                    alert('太空射击游戏 即将上线，敬请期待！');
                     break;
             }
         },

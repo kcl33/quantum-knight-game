@@ -1,14 +1,14 @@
-// P3R风格开场动画系统 - 高性能版本
-class OpeningAnimation {
+// P3R风格加载界面系统 - 高性能版本
+class LoadingScreen {
     constructor() {
         this.canvas = document.getElementById('particleCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.container = document.getElementById('openingAnimation');
         
-        // 动画状态
+        // 加载状态
         this.isActive = true;
         this.startTime = Date.now();
-        this.duration = 6000; // 6秒动画
+        this.minDuration = 3000; // 最小加载时间3秒
         this.particles = [];
         this.dataStreams = [];
         
@@ -77,17 +77,17 @@ class OpeningAnimation {
     }
     
     setupEventListeners() {
-        // 空格键跳过动画
+        // 空格键跳过加载
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space' && this.isActive) {
-                this.skipAnimation();
+                this.skipLoading();
             }
         });
         
         // 点击跳过
         this.container.addEventListener('click', () => {
             if (this.isActive) {
-                this.skipAnimation();
+                this.skipLoading();
             }
         });
     }
@@ -97,11 +97,11 @@ class OpeningAnimation {
         const progressText = document.getElementById('progressText');
         
         const messages = [
-            'INITIALIZING...',
-            'LOADING PERSONA SYSTEM...',
-            'CONNECTING TO VELVET ROOM...',
-            'PREPARING GAME DATA...',
-            'READY TO PLAY'
+            '系统初始化中...',
+            '游戏系统加载中...',
+            '连接游戏服务器中...',
+            '游戏数据准备中...',
+            '准备就绪'
         ];
         
         let currentMessage = 0;
@@ -129,7 +129,11 @@ class OpeningAnimation {
             if (progress < 100) {
                 setTimeout(updateSequence, 200 + Math.random() * 300);
             } else {
-                setTimeout(() => this.completeAnimation(), 1000);
+                // 确保至少显示最小加载时间
+                const elapsedTime = Date.now() - this.startTime;
+                const remainingTime = Math.max(0, this.minDuration - elapsedTime);
+                
+                setTimeout(() => this.completeLoading(), remainingTime);
             }
         };
         
@@ -267,11 +271,11 @@ class OpeningAnimation {
         this.ctx.restore();
     }
     
-    skipAnimation() {
-        this.completeAnimation();
+    skipLoading() {
+        this.completeLoading();
     }
     
-    completeAnimation() {
+    completeLoading() {
         this.isActive = false;
         
         // 淡出动画
@@ -285,13 +289,13 @@ class OpeningAnimation {
     }
 }
 
-// 页面加载完成后启动开场动画
+// 页面加载完成后启动加载界面
 document.addEventListener('DOMContentLoaded', () => {
-    // 先显示开场动画
+    // 先显示加载界面
     document.getElementById('mainMenu').style.display = 'none';
     document.getElementById('snakeGame').style.display = 'none';
     document.getElementById('tetrisGame').style.display = 'none';
     
-    // 启动开场动画
-    new OpeningAnimation();
+    // 启动加载界面
+    new LoadingScreen();
 });

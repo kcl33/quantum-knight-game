@@ -121,38 +121,10 @@ body {
     color: var(--white-dim);
 }
 
-/* 语言切换器 */
-.language-switcher {
+/* 用户菜单 */
+.user-menu {
     display: flex;
-    gap: 4px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    padding: 4px;
-    border: 1px solid var(--klein-blue);
-}
-
-.lang-btn {
-    background: transparent;
-    border: none;
-    color: var(--white-dim);
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 32px;
-}
-
-.lang-btn:hover {
-    color: var(--primary-white);
-    background: rgba(0, 180, 255, 0.1);
-}
-
-.lang-btn.active {
-    background: var(--electric-blue);
-    color: var(--primary-white);
-    box-shadow: 0 2px 6px rgba(0, 180, 255, 0.3);
+    align-items: center;
 }
 
 .user-name {
@@ -217,8 +189,8 @@ body::after {
     50% { opacity: 0.1; }
 }
 
-/* P3R风格开场动画 */
-.opening-animation {
+/* P3R风格加载界面 */
+.loading-screen {
     position: fixed;
     top: 0;
     left: 0;
@@ -233,12 +205,12 @@ body::after {
     transition: opacity 1s ease-out;
 }
 
-.opening-animation.fade-out {
+.loading-screen.fade-out {
     opacity: 0;
     pointer-events: none;
 }
 
-.opening-background {
+.loading-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -301,8 +273,8 @@ body::after {
     100% { background-position: 100% 20%, 100% 60%, 100% 80%; }
 }
 
-/* 开场内容 */
-.opening-content {
+/* 加载内容 */
+.loading-content {
     position: relative;
     z-index: 10;
     text-align: center;
@@ -385,8 +357,8 @@ body::after {
     100% { opacity: 0.8; transform: translateY(0); }
 }
 
-/* 开场UI元素 */
-.opening-ui {
+/* 加载UI元素 */
+.loading-ui {
     position: relative;
     margin-bottom: 60px;
 }
@@ -957,7 +929,7 @@ body::before {
 }
 
 .hotkeys::before {
-    content: 'HOTKEYS';
+        content: '热键';
     position: absolute;
     top: -12px;
     left: 20px;

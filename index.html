@@ -9,47 +9,47 @@
     <link rel="stylesheet" href="poker-original.css">
 </head>
 <body>
-    <!-- P3R风格开场动画 -->
-    <div id="openingAnimation" class="opening-animation">
-        <div class="opening-background">
+    <!-- P3R风格加载界面 -->
+    <div id="openingAnimation" class="loading-screen">
+        <div class="loading-background">
             <canvas id="particleCanvas" class="particle-canvas"></canvas>
             <div class="blue-fragments"></div>
             <div class="data-streams"></div>
         </div>
         
-        <div class="opening-content">
+        <div class="loading-content">
             <div class="logo-container">
                 <div class="persona-logo">
                     <div class="logo-line"></div>
                     <h1 class="logo-text">
-                        <span class="persona">PERSONA</span>
+                        <span class="persona">Persona</span>
                         <span class="three">3</span>
-                        <span class="reload">RELOAD</span>
+                        <span class="reload">Reload</span>
                     </h1>
                     <div class="logo-subtitle">游戏合集</div>
                 </div>
             </div>
             
-            <div class="opening-ui">
+            <div class="loading-ui">
                 <div class="scan-line"></div>
                 <div class="loading-bar">
                     <div class="loading-progress"></div>
-                    <div class="loading-text">INITIALIZING SYSTEM...</div>
+                    <div class="loading-text">系统初始化中...</div>
                 </div>
                 <div class="system-info">
                     <div class="info-line">
-                        <span class="label">STATUS:</span>
-                        <span class="value" id="statusText">BOOTING UP</span>
+                        <span class="label">状态:</span>
+                        <span class="value" id="statusText">启动中...</span>
                     </div>
                     <div class="info-line">
-                        <span class="label">PROGRESS:</span>
+                        <span class="label">进度:</span>
                         <span class="value" id="progressText">0%</span>
                     </div>
                 </div>
             </div>
             
             <div class="skip-hint">
-                <kbd>SPACE</kbd> 跳过
+                <kbd>空格</kbd> 跳过
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="nav-right">
             <div class="user-menu">
-                <span class="user-name" data-text="player">Player</span>
+                <span class="user-name" data-text="玩家">玩家</span>
             </div>
         </div>
     </nav>
@@ -78,17 +78,17 @@
                 <div class="hero-background"></div>
                 <div class="hero-content">
                     <h1 class="main-title">E3CLIPSE3大人的游戏合集</h1>
-                    <p class="main-subtitle">Experience premium gaming in your browser</p>
+                    <p class="main-subtitle">在浏览器中体验优质游戏</p>
                 </div>
             </div>
             
             <div class="games-section">
                 <div class="section-header">
-                    <h2>Featured Games</h2>
+                    <h2>精选游戏</h2>
                     <div class="section-controls">
-                        <button class="filter-btn active">All</button>
-                        <button class="filter-btn">Action</button>
-                        <button class="filter-btn">Puzzle</button>
+                        <button class="filter-btn active">全部</button>
+                        <button class="filter-btn">动作</button>
+                        <button class="filter-btn">益智</button>
                     </div>
                 </div>
                 
@@ -110,13 +110,17 @@
                         <div class="poker poker5">
                             <img src="./original-project/photos/photo (0).webp" />
                         </div>
-                        <div class="poker_top poker5" onclick="poker.move()"></div>
+                        <div class="poker_top poker5" onclick="poker.move()">
+                            <div class="game-icon">🎮</div>
+                            <div class="game-title">选择游戏</div>
+                            <div class="game-description">点击切换游戏</div>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="hotkeys">
-                <kbd>1</kbd> Snake • <kbd>2</kbd> Tetris • <kbd>3</kbd> 骑士 • <kbd>ESC</kbd> Return to Menu
+                <kbd>1</kbd> 贪吃蛇 • <kbd>2</kbd> 俄罗斯方块 • <kbd>3</kbd> 量子骑士 • <kbd>ESC</kbd> 返回主菜单
             </div>
         </div>
     </div>
@@ -261,7 +265,7 @@
         <div class="game-header">
             <div class="game-title-row">
                 <button id="backToMenuAdventure" class="back-button">← 返回菜单</button>
-                <h1>⚔️ 骑士</h1>
+                <h1>⚔️ 量子骑士</h1>
                 <div class="spacer"></div>
             </div>
             <div class="adventure-hud">
@@ -302,7 +306,7 @@
             <canvas id="adventureCanvas" width="1000" height="600"></canvas>
             <div class="game-overlay" id="adventureOverlay">
                 <div class="game-message">
-                    <h2 id="adventureMessage">骑士</h2>
+                    <h2 id="adventureMessage">量子骑士</h2>
                     <p id="adventureSubMessage">使用 WASD 移动，J/K 攻击，L 施放技能</p>
                     <button id="adventureStartButton" class="game-button">开始冒险</button>
                 </div>

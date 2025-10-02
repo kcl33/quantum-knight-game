@@ -1,10 +1,10 @@
-// 骑士游戏启动和控制脚本
+// 量子骑士游戏启动和控制脚本
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('骑士游戏启动脚本已加载');
+    console.log('[KnightGame] 量子骑士游戏启动脚本已加载');
     
     // 获取语言设置
     const savedLanguage = localStorage.getItem('gameLanguage') || 'en';
-    console.log('当前语言设置:', savedLanguage);
+    console.log('[KnightGame] 当前语言设置：', savedLanguage);
     
     // 设置语言按钮状态
     const enButton = document.getElementById('enLang');
@@ -20,21 +20,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 设置骑士游戏开始按钮事件
+    // 设置量子骑士游戏开始按钮事件
     const adventureStartButton = document.getElementById('adventureStartButton');
     if (adventureStartButton) {
         adventureStartButton.addEventListener('click', function() {
-            console.log('点击了骑士游戏开始按钮');
+            console.log('[KnightGame] 点击了量子骑士游戏开始按钮');
             const overlay = document.getElementById('adventureOverlay');
             if (overlay) {
                 overlay.style.display = 'none';
             }
             
-            // 启动骑士游戏
+            // 启动量子骑士游戏
             if (typeof startKnight === 'function') {
                 startKnight(true);
             } else {
-                console.error('找不到startKnight函数');
+                console.error('[KnightGame] 找不到startKnight函数');
             }
         });
     }
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 修复语言切换按钮
     if (enButton) {
         enButton.addEventListener('click', function() {
-            console.log('切换到英文');
+            console.log('[KnightGame] 切换到英文');
             localStorage.setItem('gameLanguage', 'en');
             enButton.classList.add('active');
             zhButton.classList.remove('active');
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (zhButton) {
         zhButton.addEventListener('click', function() {
-            console.log('切换到中文');
+            console.log('[KnightGame] 切换到中文');
             localStorage.setItem('gameLanguage', 'zh');
             zhButton.classList.add('active');
             enButton.classList.remove('active');
@@ -69,13 +69,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// 修复骑士游戏功能
+// 修复量子骑士游戏功能
 window.fixKnight = function() {
-    // 获取骑士游戏容器
+    // 获取量子骑士游戏容器
     const adventureContainer = document.getElementById('adventureGame');
     if (!adventureContainer) return;
     
-    // 获取骑士游戏画布
+    // 获取量子骑士游戏画布
     const canvas = document.getElementById('adventureCanvas');
     if (!canvas) return;
     
@@ -91,14 +91,14 @@ window.fixKnight = function() {
     // 创建新的游戏实例
     if (typeof Knight === 'function') {
         window.knight = new Knight();
-        console.log('骑士游戏实例已创建');
+        console.log('[KnightGame] 量子骑士游戏实例已创建');
     } else {
-        console.error('找不到Knight类');
+        console.error('[KnightGame] 找不到Knight类');
     }
 };
 
-// 在页面加载完成后修复骑士游戏
+// 在页面加载完成后修复量子骑士游戏
 window.addEventListener('load', function() {
-    console.log('页面完全加载，修复骑士游戏');
+    console.log('[KnightGame] 页面完全加载，修复量子骑士游戏');
     window.fixKnight();
 });

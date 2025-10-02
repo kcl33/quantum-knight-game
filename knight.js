@@ -64,6 +64,7 @@ class Knight {
         this.frameCount = 0;
         this.fps = 60;
         this.frameInterval = 1000 / this.fps;
+        this.animationFrameId = null;
         
         this.init();
     }
@@ -98,7 +99,7 @@ class Knight {
             
         } catch (error) {
             console.error('游戏初始化错误:', error);
-            alert('游戏初始化失败: ' + error.message);
+            alert('游戏初始化失败，请刷新页面重试');
         }
     }
     
@@ -210,13 +211,13 @@ class Knight {
             
             // 技能系统
             skills: {
-                energyBlast: {
+                能量弹: {
                     energyCost: 30,
                     cooldown: 2000,
                     lastUsed: 0,
                     damage: 40
                 },
-                shield: {
+                护盾: {
                     energyCost: 20,
                     duration: 3000,
                     cooldown: 5000,
@@ -418,12 +419,12 @@ class Knight {
         }
         
         if (this.gameState === 'paused') {
-            requestAnimationFrame((time) => this.gameLoop(time));
+            this.animationFrameId = requestAnimationFrame((time) => this.gameLoop(time));
             return;
         }
         
         if (currentTime - this.lastTime < this.frameInterval) {
-            requestAnimationFrame((time) => this.gameLoop(time));
+            this.animationFrameId = requestAnimationFrame((time) => this.gameLoop(time));
             return;
         }
         
@@ -434,7 +435,7 @@ class Knight {
         this.update(deltaTime);
         this.render();
         
-        requestAnimationFrame((time) => this.gameLoop(time));
+        this.animationFrameId = requestAnimationFrame((time) => this.gameLoop(time));
     }
     
     update(deltaTime) {
@@ -538,12 +539,12 @@ class Knight {
         }
         
         // 技能 - 能量爆炸
-        if (this.keys['k'] && this.canUseSkill('energyBlast')) {
+        if (this.keys['k'] && this.canUseSkill('能量弹')) {
             this.useEnergyBlast();
         }
         
         // 技能 - 护盾
-        if (this.keys['l'] && this.canUseSkill('shield')) {
+        if (this.keys['l'] && this.canUseSkill('护盾')) {
             this.useShield();
         }
     }
@@ -593,7 +594,7 @@ class Knight {
     
     useEnergyBlast() {
         if (!this.player || !this.player.isAlive) return;
-        const skill = this.player.skills.energyBlast;
+        const skill = this.player.skills.能量弹;
         this.player.energy -= skill.energyCost;
         skill.lastUsed = Date.now();
         this.player.currentAnimation = 'skill';
@@ -608,7 +609,7 @@ class Knight {
             vx: direction * 12,
             vy: 0,
             damage: skill.damage,
-            type: 'energyBlast',
+            type: '能量弹',
             owner: 'player',
             color: '#00B4FF',
             trail: []
@@ -619,7 +620,7 @@ class Knight {
     
     useShield() {
         if (!this.player || !this.player.isAlive) return;
-        const skill = this.player.skills.shield;
+        const skill = this.player.skills.护盾;
         this.player.energy -= skill.energyCost;
         skill.lastUsed = Date.now();
         skill.active = true;
@@ -670,7 +671,7 @@ class Knight {
         // 敌人碰撞
         this.enemies.forEach(enemy => {
             if (enemy.isAlive && this.checkCollision(this.player, enemy)) {
-                if (!this.player.skills.shield.active) {
+                if (!this.player.skills.护盾.active) {
                     this.damagePlayer(enemy.attackPower);
                     this.knockback(this.player, enemy);
                 }
@@ -679,7 +680,7 @@ class Knight {
         
         // Boss碰撞
         if (this.boss && this.boss.isAlive && this.checkCollision(this.player, this.boss)) {
-            if (!this.player.skills.shield.active) {
+            if (!this.player.skills.护盾.active) {
                 this.damagePlayer(this.boss.attackPower);
                 this.knockback(this.player, this.boss);
             }
@@ -1305,11 +1306,11 @@ class Knight {
     renderDebugInfo() {
         this.ctx.fillStyle = '#FFFFFF';
         this.ctx.font = '14px Arial';
-        this.ctx.fillText(`Game State: ${this.gameState}`, 10, 30);
-        this.ctx.fillText(`FPS: ${Math.round(60)}`, 10, 50);
-        this.ctx.fillText(`Player: (${Math.round(this.player.x)}, ${Math.round(this.player.y)})`, 10, 70);
-        this.ctx.fillText(`Camera: (${Math.round(this.camera.x)}, ${Math.round(this.camera.y)})`, 10, 90);
-        this.ctx.fillText(`Enemies: ${this.enemies.length}`, 10, 110);
+        this.ctx.fillText(`游戏状态: ${this.gameState}`, 10, 30);
+        this.ctx.fillText(`帧率: ${Math.round(60)}`, 10, 50);
+        this.ctx.fillText(`玩家: (${Math.round(this.player.x)}, ${Math.round(this.player.y)})`, 10, 70);
+        this.ctx.fillText(`摄像机: (${Math.round(this.camera.x)}, ${Math.round(this.camera.y)})`, 10, 90);
+        this.ctx.fillText(`敌人数量: ${this.enemies.length}`, 10, 110);
         
         // 在画布中心显示状态
         this.ctx.font = '24px Arial';
@@ -1364,7 +1365,7 @@ class Knight {
         const player = this.player;
         
         // 护盾效果
-        if (player.skills.shield.active) {
+        if (player.skills.护盾.active) {
             this.ctx.save();
             this.ctx.globalAlpha = 0.3;
             this.ctx.fillStyle = '#00B4FF';
@@ -1732,6 +1733,37 @@ class Knight {
             });
         }
     }
+    
+    cleanup() {
+        console.log('Cleaning up knight game resources...');
+        
+        // 移除事件监听器
+        if (this.keydownHandler) {
+            document.removeEventListener('keydown', this.keydownHandler);
+        }
+        if (this.keyupHandler) {
+            document.removeEventListener('keyup', this.keyupHandler);
+        }
+        
+        // 清理游戏对象
+        this.player = null;
+        this.enemies = [];
+        this.boss = null;
+        this.projectiles = [];
+        this.particles = [];
+        this.collectibles = [];
+        this.platforms = [];
+        
+        // 清理动画帧
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+        }
+        
+        // 重置游戏状态
+        this.gameState = 'paused';
+        
+        console.log('Knight game resources cleaned up');
+    }
 }
 
 // 全局游戏实例
@@ -1739,26 +1771,26 @@ let knight = null;
 
 // 添加全局测试函数
 window.testKnight = function() {
-    console.log('测试骑士函数...');
+    console.log('Testing knight function...');
     const canvas = document.getElementById('adventureCanvas');
     const gameContainer = document.getElementById('adventureGame');
-    console.log('Canvas 元素:', canvas);
-    console.log('游戏容器:', gameContainer);
-    console.log('startKnight 函数:', typeof startKnight);
+    console.log('Canvas element:', canvas);
+    console.log('Game container:', gameContainer);
+    console.log('startKnight function:', typeof startKnight);
 };
 
 // 游戏启动函数
 function startKnight() {
-    console.log('尝试启动骑士游戏...');
+    console.log('Trying to start knight game...');
     
     const gameContainer = document.getElementById('adventureGame');
     if (!gameContainer) {
-        console.error('无法找到游戏容器 #adventureGame');
+        console.error('Cannot find game container #adventureGame');
         return;
     }
     
     if (gameContainer.style.display === 'none') {
-        console.log('显示游戏容器...');
+        console.log('Showing game container...');
         
         // 隐藏所有其他游戏
         document.querySelectorAll('.game-container').forEach(game => {
@@ -1781,7 +1813,7 @@ function startKnight() {
             try {
                 // 清理旧的游戏实例
                 if (knight) {
-                    console.log('清理旧的游戏实例...');
+                    console.log('Cleaning up old game instance...');
                     if (typeof knight.cleanup === 'function') {
                         knight.cleanup();
                     }
@@ -1789,28 +1821,28 @@ function startKnight() {
                 }
                 
                 // 创建新游戏实例
-                console.log('创建新的游戏实例...');
+                console.log('Creating new game instance...');
                 knight = new Knight();
                 
                 // 显示游戏覆盖层
                 const overlay = document.getElementById('adventureOverlay');
                 if (overlay) {
                     overlay.style.display = 'block';
-                    console.log('游戏覆盖层已显示');
+                    console.log('Game overlay displayed');
                 }
                 
                 if (knight) {
-                    console.log('骑士游戏启动成功！');
+                    console.log('Knight game started successfully!');
                 } else {
-                    console.error('游戏实例创建失败');
+                    console.error('Game instance creation failed');
                 }
             } catch (error) {
-                console.error('游戏初始化失败:', error);
+                console.error('Game initialization failed:', error);
             }
         }, 100);
         
     } else {
-        console.log('隐藏游戏，返回主菜单...');
+        console.log('Hiding game, returning to main menu...');
         
         // 隐藏游戏，返回主菜单
         gameContainer.style.display = 'none';

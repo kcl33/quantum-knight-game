@@ -328,9 +328,9 @@ class TetrisGame {
             this.highScore = this.score;
             localStorage.setItem('tetrisHighScore', this.highScore);
             this.updateHighScore();
-            this.showOverlay('新纪录！', `恭喜你达到了 ${this.score} 分！\n按 ESC 返回菜单`);
+            this.showOverlay('新纪录！', `恭喜你达到了 ${this.score} 分！\n按 ESC 返回主菜单`);
         } else {
-            this.showOverlay('游戏结束', `你的分数: ${this.score}\n按 ESC 返回菜单`);
+            this.showOverlay('游戏结束', `你的分数: ${this.score}\n按 ESC 返回主菜单`);
         }
     }
 

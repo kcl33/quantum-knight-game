@@ -7,123 +7,13 @@ class GameManager {
             tetris: null,
             adventure: null
         };
-        this.currentLanguage = 'zh'; // 默认中文
-        this.translations = {
-            zh: {
-                // 主菜单
-                gameCollection: 'E3CLIPSE3游戏',
-                experiencePremium: '这只是一个用来练手的摸鱼作品罢了',
-                featuredGames: '精选游戏',
-                all: '全部',
-                action: '动作',
-                puzzle: '益智',
-                searchGames: '搜索游戏...',
-                player: '玩家',
-                // 游戏卡片
-                snakeClassic: '贪吃蛇经典',
-                arcadeClassic: '街机 • 经典',
-                snakeDesc: '经典贪吃蛇游戏，简单易上手的休闲娱乐',
-                tetrisMaster: '俄罗斯方块大师',
-                puzzleClassic: '益智 • 经典',
-                tetrisDesc: '经典俄罗斯方块，考验你的反应和策略',
-                knight: '骑士',
-            actionAdventure: '动作 • 冒险',
-            knightDesc: '横版动作冒险游戏，体验刺激的战斗与探索',
-                highScore: '最高分: ',
-                // 控制说明
-                hotkeys: '快捷键',
-                returnToMenu: '返回菜单',
-                // 游戏内界面
-                score: '分数: ',
-                level: '等级: ',
-                lines: '行数: ',
-                lives: '生命: ',
-                startGame: '开始游戏',
-                startAdventure: '开始冒险',
-                gameControls: '游戏控制',
-                move: '移动',
-                jump: '跳跃',
-                lightAttack: '轻攻击',
-                heavyAttack: '重攻击',
-                skillAttack: '技能攻击',
-                pauseContinue: '暂停/继续',
-                pause: '暂停',
-                up: '向上',
-                down: '向下',
-                left: '向左',
-                right: '向右',
-                restart: '重新开始'
-            },
-            en: {
-                // 主菜单
-                gameCollection: 'Game Collection',
-                experiencePremium: 'Experience premium gaming in your browser',
-                featuredGames: 'Featured Games',
-                all: 'All',
-                action: 'Action',
-                puzzle: 'Puzzle',
-                searchGames: 'Search games...',
-                player: 'Player',
-                // 游戏卡片
-                snakeClassic: 'Snake Classic',
-                arcadeClassic: 'Arcade • Classic',
-                snakeDesc: 'Classic snake game, simple and easy casual entertainment',
-                tetrisMaster: 'Tetris Master',
-                puzzleClassic: 'Puzzle • Classic',
-                tetrisDesc: 'Classic Tetris, test your reaction and strategy',
-                knight: 'Knight',
-                actionAdventure: 'Action • Adventure',
-   knight: 'Knight',
-            knightDesc: '2D platformer adventure game, experience exciting combat and exploration',
-                highScore: 'High Score: ',
-                // 控制说明
-                hotkeys: 'Hotkeys',
-                returnToMenu: 'Return to Menu',
-                // 游戏内界面
-                score: 'Score: ',
-                level: 'Level: ',
-                lines: 'Lines: ',
-                lives: 'Lives: ',
-                startGame: 'Start Game',
-                startAdventure: 'Start Adventure',
-                gameControls: 'Game Controls',
-                move: 'Move',
-                jump: 'Jump',
-                lightAttack: 'Light Attack',
-                heavyAttack: 'Heavy Attack',
-                skillAttack: 'Skill Attack',
-                pauseContinue: 'Pause/Continue',
-                pause: 'Pause',
-                up: 'Up',
-                down: 'Down',
-                left: 'Left',
-                right: 'Right',
-                restart: 'Restart'
-            }
-        };
         this.init();
     }
 
     init() {
-        // 从本地存储加载语言设置
-        const savedLang = localStorage.getItem('gameLanguage');
-        if (savedLang) {
-            this.currentLanguage = savedLang;
-        }
-        
         this.setupEventListeners();
-        this.setupLanguageSwitcher();
         this.updateHighScores();
         this.showMainMenu();
-        this.updateLanguage(); // 初始化时应用语言
-        
-        // 初始化语言切换按钮状态
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-lang') === this.currentLanguage) {
-                btn.classList.add('active');
-            }
-        });
     }
 
     setupEventListeners() {
@@ -132,170 +22,49 @@ class GameManager {
         this.bindKeyboardEvents();
     }
     
-    setupLanguageSwitcher() {
-        const langButtons = document.querySelectorAll('.lang-btn');
-        langButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const lang = btn.getAttribute('data-lang');
-                this.switchLanguage(lang);
-            });
-        });
-    }
-    
-    switchLanguage(lang) {
-        this.currentLanguage = lang;
-        
-        // 更新按钮状态
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-lang') === lang) {
-                btn.classList.add('active');
-            }
-        });
-        
-        // 保存语言设置到本地存储
-        localStorage.setItem('gameLanguage', lang);
-        
-        // 应用语言更改
-        this.updateLanguage();
-        console.log(`语言切换到: ${lang}`);
-    }
-    
-    updateLanguage() {
-        const t = this.translations[this.currentLanguage];
-        
-        // 更新主菜单
-        this.updateElement('.main-title', t.gameCollection);
-        this.updateElement('.main-subtitle', t.experiencePremium);
-        this.updateElement('.section-header h2', t.featuredGames);
-        
-        // 更新过滤器按钮
-        this.updateElements('.filter-btn', [t.all, t.action, t.puzzle]);
-        
-        // 更新游戏卡片
-        this.updateGameCard('[data-game="snake"]', {
-            title: t.snakeClassic,
-            genre: t.arcadeClassic,
-            description: t.snakeDesc
-        });
-        
-        this.updateGameCard('[data-game="tetris"]', {
-            title: t.tetrisMaster,
-            genre: t.puzzleClassic,
-            description: t.tetrisDesc
-        });
-        
-        this.updateGameCard('[data-game="adventure"]', {
-            title: t.knight,
-            genre: t.actionAdventure,
-            description: t.knightDesc
-        });
-        
-        // 更新搜索框
-        this.updatePlaceholder('#searchInput', t.searchGames);
-        
-        // 更新用户名
-        this.updateElement('.user-name', t.player);
-        
-        // 更新游戏内界面
-        this.updateGameUI(t);
-    }
-    
-    updateElement(selector, text) {
-        const element = document.querySelector(selector);
-        if (element) {
-            element.textContent = text;
-        }
-    }
-    
-    updateElements(selector, texts) {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach((element, index) => {
-            if (texts[index]) {
-                element.textContent = texts[index];
-            }
-        });
-    }
-    
-    updateGameCard(selector, content) {
-        const card = document.querySelector(selector);
-        if (card) {
-            const title = card.querySelector('h3');
-            const genre = card.querySelector('.game-genre');
-            const description = card.querySelector('.game-description');
-            
-            if (title) title.textContent = content.title;
-            if (genre) genre.textContent = content.genre;
-            if (description) description.textContent = content.description;
-        }
-    }
-    
-    updatePlaceholder(selector, text) {
-        const element = document.querySelector(selector);
-        if (element) {
-            element.placeholder = text;
-        }
-    }
-    
-    updateGameUI(t) {
-        // 更新贪吃蛇游戏界面
-        this.updateElement('#snakeGame h1', `🐍 ${t.snakeClassic}`);
-        this.updateElement('#backToMenuSnake', `← ${t.returnToMenu}`);
-        this.updateElement('#snakeGame .score span:first-child', t.score.slice(0, -2));
-        this.updateElement('#snakeGame .high-score span:first-child', t.highScore.slice(0, -2));
-        this.updateElement('#snakeStartButton', t.startGame);
-        
-        // 更新俄罗斯方块游戏界面
-        this.updateElement('#tetrisGame h1', `🧩 ${t.tetrisMaster}`);
-        this.updateElement('#backToMenuTetris', `← ${t.returnToMenu}`);
-        this.updateElement('#tetrisStartButton', t.startGame);
-        
-        // 更新骑士游戏界面
-          this.updateElement('#adventureGame h1', `⚔️ ${t.knight}`);
-        this.updateElement('#backToMenuAdventure', `← ${t.returnToMenu}`);
-        this.updateElement('#adventureStartButton', t.startAdventure);
-        
-        // 更新控制说明
-        this.updateElement('#snakeGame .control-instructions h3', t.gameControls);
-        this.updateElement('#tetrisGame .control-instructions h3', t.gameControls);
-        this.updateElement('#adventureGame .control-instructions h3', t.gameControls);
-    }
-    
     bindGameCardEvents() {
-        // 移除旧的事件监听器
-        document.querySelectorAll('.poker-card').forEach(card => {
-            const newCard = card.cloneNode(true);
-            card.parentNode.replaceChild(newCard, card);
-        });
-        
-        // 添加新的事件监听器
-        document.querySelectorAll('.poker-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                const gameType = card.dataset.game;
-                console.log('点击游戏卡片:', gameType);
-                this.startGame(gameType);
+        // 贪吃蛇游戏卡片
+        const snakeCard = document.querySelector('[data-game="snake"]');
+        if (snakeCard) {
+            snakeCard.addEventListener('click', () => {
+                this.startGame('snake');
             });
-        });
+        }
+
+        // 俄罗斯方块游戏卡片
+        const tetrisCard = document.querySelector('[data-game="tetris"]');
+        if (tetrisCard) {
+            tetrisCard.addEventListener('click', () => {
+                this.startGame('tetris');
+            });
+        }
+
+        // 量子骑士游戏卡片
+        const adventureCard = document.querySelector('[data-game="adventure"]');
+        if (adventureCard) {
+            adventureCard.addEventListener('click', () => {
+                this.startGame('adventure');
+            });
+        }
     }
     
-    // 初始化量子骑士游戏
+    // 初始化骑士游戏
     initAdventureGame() {
-        console.log('初始化量子骑士游戏...');
+        console.log('[GameManager] 初始化量子骑士游戏...');
         
         // 确保画布元素存在
         const canvas = document.getElementById('adventureCanvas');
         if (!canvas) {
-            console.error('找不到量子骑士游戏画布元素');
+            console.error('找不到骑士游戏画布元素');
             return;
         }
         
         // 初始化游戏实例
         if (typeof Knight === 'function') {
             this.games.adventure = new Knight();
-            console.log('骑士游戏初始化完成');
+            console.log('[GameManager] 量子骑士游戏初始化完成');
         } else {
-            console.error('找不到Knight类，请确保knight.js已加载');
+            console.error('[GameManager] 错误：找不到Knight类，请确保knight.js已正确加载');
         }
     }
     
@@ -327,58 +96,37 @@ class GameManager {
     
     // 重新绑定事件（用于DOM更新后）
     rebindEvents() {
-        console.log('重新绑定游戏事件...');
+        console.log('[GameManager] 重新绑定所有游戏事件监听器');
         this.bindGameCardEvents();
     }
 
     updateHighScores() {
         // 由于现在使用轮播卡片，不再需要更新主菜单中的高分显示
         // 游戏内部的高分显示将在游戏启动时更新
-        console.log('更新高分显示');
+        console.log('[GameManager] 更新所有游戏的高分显示');
     }
 
     startGame(gameType) {
-        this.hideMainMenu();
+        console.log(`[GameManager] 启动${gameType === 'snake' ? '贪吃蛇' : gameType === 'tetris' ? '俄罗斯方块' : '量子骑士'}游戏`);
         
-        if (gameType === 'snake') {
-            this.showSnakeGame();
-            if (!this.games.snake) {
-                this.games.snake = new SnakeGame();
-            } else {
-                this.games.snake.init();
-            }
-        } else if (gameType === 'tetris') {
-            this.showTetrisGame();
-            if (!this.games.tetris) {
-                this.games.tetris = new TetrisGame();
-            } else {
-                this.games.tetris.init();
-            }
-        } else if (gameType === 'adventure') {
-            this.showAdventureGame();
-            console.log('尝试启动量子骑士游戏...');
-            
-            // 初始化量子骑士游戏
-            if (!this.games.adventure) {
-                this.initAdventureGame();
-            }
-            
-            // 设置开始按钮事件
-            const startButton = document.getElementById('adventureStartButton');
-            if (startButton) {
-                startButton.addEventListener('click', () => {
-                    const overlay = document.getElementById('adventureOverlay');
-                    if (overlay) {
-                        overlay.style.display = 'none';
-                    }
-                    if (this.games.adventure) {
-                        this.games.adventure.start();
-                    }
-                });
-            }
+        // 隐藏主菜单
+        document.getElementById('mainMenu').style.display = 'none';
+        
+        // 根据游戏类型启动相应的游戏
+        switch(gameType) {
+            case 'snake':
+                this.startSnakeGame();
+                break;
+            case 'tetris':
+                this.startTetrisGame();
+                break;
+            case 'adventure':
+                this.startAdventureGame();
+                break;
+            default:
+                console.error(`[GameManager] 未知游戏类型: ${gameType}`);
+                this.showMainMenu();
         }
-        
-        this.currentGame = gameType;
     }
 
     backToMenu() {
@@ -387,10 +135,12 @@ class GameManager {
         } else if (this.currentGame === 'tetris' && this.games.tetris) {
             this.games.tetris.cleanup();
         } else if (this.currentGame === 'adventure') {
-            // 清理量子骑士游戏
-            if (typeof knight !== 'undefined' && knight) {
-                knight.gameState = 'paused';
-                knight = null;
+            // 清理骑士游戏
+            if (this.games.adventure) {
+                if (typeof this.games.adventure.cleanup === 'function') {
+                    this.games.adventure.cleanup();
+                }
+                this.games.adventure = null;
             }
         }
         
@@ -422,6 +172,51 @@ class GameManager {
             adventureGame.style.display = 'block';
         }
     }
+    
+    startSnakeGame() {
+        this.showSnakeGame();
+        if (!this.games.snake) {
+            this.games.snake = new SnakeGame();
+        } else {
+            this.games.snake.init();
+        }
+        this.currentGame = 'snake';
+    }
+    
+    startTetrisGame() {
+        this.showTetrisGame();
+        if (!this.games.tetris) {
+            this.games.tetris = new TetrisGame();
+        } else {
+            this.games.tetris.init();
+        }
+        this.currentGame = 'tetris';
+    }
+    
+    startAdventureGame() {
+        this.showAdventureGame();
+        console.log('[GameManager] 尝试启动量子骑士游戏...');
+        
+        // 初始化量子骑士游戏
+        if (!this.games.adventure) {
+            this.initAdventureGame();
+        }
+        
+        // 设置开始按钮事件
+        const startButton = document.getElementById('adventureStartButton');
+        if (startButton) {
+            startButton.addEventListener('click', () => {
+                const overlay = document.getElementById('adventureOverlay');
+                if (overlay) {
+                    overlay.style.display = 'none';
+                }
+                if (this.games.adventure) {
+                    this.games.adventure.start();
+                }
+            });
+        }
+        this.currentGame = 'adventure';
+    }
 
     hideAllGames() {
         document.getElementById('snakeGame').style.display = 'none';
@@ -430,6 +225,33 @@ class GameManager {
         const adventureGame = document.getElementById('adventureGame');
         if (adventureGame) {
             adventureGame.style.display = 'none';
+        }
+    }
+    
+    // 切换语言功能
+    switchLanguage(lang) {
+        console.log(`[GameManager] 切换语言到: ${lang}`);
+        localStorage.setItem('gameLanguage', lang);
+        
+        // 更新语言按钮状态
+        const enButton = document.getElementById('enLang');
+        const zhButton = document.getElementById('zhLang');
+        
+        if (enButton && zhButton) {
+            if (lang === 'en') {
+                enButton.classList.add('active');
+                zhButton.classList.remove('active');
+            } else {
+                zhButton.classList.add('active');
+                enButton.classList.remove('active');
+            }
+        }
+        
+        // 如果当前有游戏运行，通知游戏切换语言
+        if (this.currentGame && this.games[this.currentGame]) {
+            if (typeof this.games[this.currentGame].switchLanguage === 'function') {
+                this.games[this.currentGame].switchLanguage(lang);
+            }
         }
     }
 }

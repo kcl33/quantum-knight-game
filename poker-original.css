@@ -35,6 +35,7 @@ div {
     background-color: #17f700;
     transform-origin: bottom left;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .poker img {
@@ -47,10 +48,57 @@ div {
     transition: 0.3s ease;
     cursor: pointer;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    text-align: center;
+    pointer-events: none;
+}
+
+.poker_top .game-icon,
+.poker_top .game-title,
+.poker_top .game-description {
+    pointer-events: auto;
 }
 
 .poker_top:hover {
     background-color: #aaa;
+}
+
+.poker {
+    pointer-events: auto;
+    z-index: 10;
+}
+
+/* 确保其他元素不阻挡游戏卡片的点击 */
+.opening-animation,
+.game-overlay {
+    pointer-events: none;
+}
+
+.opening-animation .game-button,
+.opening-animation .skip-hint,
+.game-overlay .game-button {
+    pointer-events: auto;
+}
+
+.poker_top .game-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.poker_top .game-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.poker_top .game-description {
+    font-size: 1rem;
+    padding: 0 1rem;
+    line-height: 1.4;
 }
 
 .poker1 {
@@ -71,4 +119,35 @@ div {
 
 .poker5 {
     transform: rotate(6deg) translate(125%, -23%);
+}
+
+/* 游戏卡片样式 */
+.game-card {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    border-radius: 1.5rem;
+    box-sizing: border-box;
+}
+
+.game-card .game-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.game-card .game-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.game-card .game-description {
+    font-size: 1rem;
+    padding: 0 1rem;
+    line-height: 1.4;
 }
