@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E3CLIPSE3大人的游戏合集</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="poker-style.css">
+    <link rel="stylesheet" href="poker-carousel.css">
+</head>
+<body>
+    <!-- P3R风格开场动画 -->
+    <div id="openingAnimation" class="opening-animation">
+        <div class="opening-background">
+            <canvas id="particleCanvas" class="particle-canvas"></canvas>
+            <div class="blue-fragments"></div>
+            <div class="data-streams"></div>
+        </div>
+        
+        <div class="opening-content">
+            <div class="logo-container">
+                <div class="persona-logo">
+                    <div class="logo-line"></div>
+                    <h1 class="logo-text">
+                        <span class="persona">PERSONA</span>
+                        <span class="three">3</span>
+                        <span class="reload">RELOAD</span>
+                    </h1>
+                    <div class="logo-subtitle">游戏合集</div>
+                </div>
+            </div>
+            
+            <div class="opening-ui">
+                <div class="scan-line"></div>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                    <div class="loading-text">INITIALIZING SYSTEM...</div>
+                </div>
+                <div class="system-info">
+                    <div class="info-line">
+                        <span class="label">STATUS:</span>
+                        <span class="value" id="statusText">BOOTING UP</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="label">PROGRESS:</span>
+                        <span class="value" id="progressText">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skip-hint">
+                <kbd>SPACE</kbd> 跳过
+            </div>
+        </div>
+    </div>
+    <!-- 主导航栏 -->
+    <nav class="top-navbar">
+        <div class="nav-left">
+            <div class="logo">E3CLIPSE3</div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active">游戏合集</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="user-menu">
+                <span class="user-name" data-text="player">Player</span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 鼠标坐标跟随 -->
+    <div class="mouse-coordinates" id="mouseCoords">0, 0</div>
+    
+    <!-- 主菜单界面 -->
+    <div id="mainMenu" class="main-menu">
+        <div class="content-wrapper">
+            <div class="hero-section">
+                <div class="hero-background"></div>
+                <div class="hero-content">
+                    <h1 class="main-title">E3CLIPSE3大人的游戏合集</h1>
+                    <p class="main-subtitle">Experience premium gaming in your browser</p>
+                </div>
+            </div>
+            
+            <div class="games-section">
+                <div class="section-header">
+                    <h2>Featured Games</h2>
+                    <div class="section-controls">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Action</button>
+                        <button class="filter-btn">Puzzle</button>
+                    </div>
+                </div>
+                
+                <div class="poker-carousel-container">
+                    <!-- 扑克牌卡片将由JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="hotkeys">
+                <kbd>1</kbd> Snake • <kbd>2</kbd> Tetris • <kbd>3</kbd> 骑士 • <kbd>ESC</kbd> Return to Menu
+            </div>
+        </div>
+    </div>
+    
+    <!-- 贪吃蛇游戏界面 -->
+    <div id="snakeGame" class="game-container" style="display: none;">
+        <div class="game-header">
+            <div class="game-title-row">
+                <button id="backToMenuSnake" class="back-button">← 返回菜单</button>
+                <h1>🐍 贪吃蛇游戏</h1>
+                <div class="spacer"></div>
+            </div>
+            <div class="score-board">
+                <div class="score">
+                    <span>分数: </span>
+                    <span id="snakeScore">0</span>
+                </div>
+                <div class="high-score">
+                    <span>最高分: </span>
+                    <span id="snakeHighScoreDisplay">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <canvas id="snakeCanvas" width="600" height="600"></canvas>
+            <div class="game-overlay" id="snakeOverlay">
+                <div class="game-message">
+                    <h2 id="snakeMessage">按空格键开始游戏</h2>
+                    <p id="snakeSubMessage">使用 WASD 或方向键控制蛇的移动</p>
+                    <button id="snakeStartButton" class="game-button">开始游戏</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="control-instructions">
+                <h3>游戏控制</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <kbd>W</kbd> <kbd>↑</kbd> 向上
+                    </div>
+                    <div class="control-item">
+                        <kbd>S</kbd> <kbd>↓</kbd> 向下
+                    </div>
+                    <div class="control-item">
+                        <kbd>A</kbd> <kbd>←</kbd> 向左
+                    </div>
+                    <div class="control-item">
+                        <kbd>D</kbd> <kbd>→</kbd> 向右
+                    </div>
+                    <div class="control-item">
+                        <kbd>Space</kbd> 暂停/继续
+                    </div>
+                    <div class="control-item">
+                        <kbd>R</kbd> 重新开始
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 俄罗斯方块游戏界面 -->
+    <div id="tetrisGame" class="game-container" style="display: none;">
+        <div class="game-header">
+            <div class="game-title-row">
+                <button id="backToMenuTetris" class="back-button">← 返回菜单</button>
+                <h1>🧩 俄罗斯方块</h1>
+                <div class="spacer"></div>
+            </div>
+            <div class="score-board">
+                <div class="score">
+                    <span>分数: </span>
+                    <span id="tetrisScore">0</span>
+                </div>
+                <div class="high-score">
+                    <span>等级: </span>
+                    <span id="tetrisLevel">1</span>
+                </div>
+                <div class="score">
+                    <span>行数: </span>
+                    <span id="tetrisLines">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tetris-game-area">
+            <div class="tetris-side-panel">
+                <div class="next-piece">
+                    <h4>下一个</h4>
+                    <canvas id="nextPieceCanvas" width="120" height="120"></canvas>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span>最高分:</span>
+                        <span id="tetrisHighScoreDisplay">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tetris-main-area">
+                <canvas id="tetrisCanvas" width="400" height="600"></canvas>
+                <div class="game-overlay" id="tetrisOverlay">
+                    <div class="game-message">
+                        <h2 id="tetrisMessage">按空格键开始游戏</h2>
+                        <p id="tetrisSubMessage">使用方向键控制方块移动和旋转</p>
+                        <button id="tetrisStartButton" class="game-button">开始游戏</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="control-instructions">
+                <h3>游戏控制</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <kbd>←</kbd> 左移
+                    </div>
+                    <div class="control-item">
+                        <kbd>→</kbd> 右移
+                    </div>
+                    <div class="control-item">
+                        <kbd>↓</kbd> 快速下降
+                    </div>
+                    <div class="control-item">
+                        <kbd>↑</kbd> 旋转
+                    </div>
+                    <div class="control-item">
+                        <kbd>Space</kbd> 瞬间下降
+                    </div>
+                    <div class="control-item">
+                        <kbd>P</kbd> 暂停/继续
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 量子骑士游戏界面 -->
+    <div id="adventureGame" class="game-container" style="display: none;">
+        <div class="game-header">
+            <div class="game-title-row">
+                <button id="backToMenuAdventure" class="back-button">← 返回菜单</button>
+                <h1>⚔️ 骑士</h1>
+                <div class="spacer"></div>
+            </div>
+            <div class="adventure-hud">
+                <div class="player-stats">
+                    <div class="health-bar">
+                        <div class="stat-label">HP</div>
+                        <div class="bar-container">
+                            <div class="bar health-fill" id="playerHealth"></div>
+                        </div>
+                        <div class="stat-value" id="healthText">100/100</div>
+                    </div>
+                    <div class="energy-bar">
+                        <div class="stat-label">MP</div>
+                        <div class="bar-container">
+                            <div class="bar energy-fill" id="playerEnergy"></div>
+                        </div>
+                        <div class="stat-value" id="energyText">50/50</div>
+                    </div>
+                </div>
+                <div class="game-info">
+                    <div class="score-display">
+                        <span>分数: </span>
+                        <span id="adventureScore">0</span>
+                    </div>
+                    <div class="level-display">
+                        <span>关卡: </span>
+                        <span id="currentLevel">1</span>
+                    </div>
+                    <div class="lives-display">
+                        <span>生命: </span>
+                        <span id="playerLives">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="adventure-game-area">
+            <canvas id="adventureCanvas" width="1000" height="600"></canvas>
+            <div class="game-overlay" id="adventureOverlay">
+                <div class="game-message">
+                    <h2 id="adventureMessage">骑士</h2>
+                    <p id="adventureSubMessage">使用 WASD 移动，J/K 攻击，L 施放技能</p>
+                    <button id="adventureStartButton" class="game-button">开始冒险</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="control-instructions">
+                <h3>游戏控制</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <kbd>W/A/S/D</kbd> 移动
+                    </div>
+                    <div class="control-item">
+                        <kbd>J</kbd> 轻攻击
+                    </div>
+                    <div class="control-item">
+                        <kbd>K</kbd> 重攻击
+                    </div>
+                    <div class="control-item">
+                        <kbd>L</kbd> 技能攻击
+                    </div>
+                    <div class="control-item">
+                        <kbd>Space</kbd> 跳跃
+                    </div>
+                    <div class="control-item">
+                        <kbd>P</kbd> 暂停
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="opening.js"></script>
+    <script src="tetris.js"></script>
+    <script src="knight.js"></script>
+    <script src="game.js"></script>
+    <script src="start.js"></script>
+    
+    <!-- 扑克牌轮播效果 -->
+    <script src="poker-carousel.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化游戏管理器
+            window.gameManager = new GameManager();
+            
+            // 从本地存储加载语言设置
+            const savedLanguage = localStorage.getItem('gameLanguage') || 'en';
+            window.gameManager.switchLanguage(savedLanguage);
+        });
+    </script>
+</body>
+</html>
