@@ -39,7 +39,7 @@ html {
 
 body {
     font-family: 'Microsoft YaHei', 'Segoe UI', 'Roboto', sans-serif;
-    background: var(--klein-blue-dark);
+    background: transparent;
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -155,7 +155,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -2;
+    z-index: -3;
     opacity: 0.7;
 }
 
@@ -557,7 +557,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, var(--klein-blue) 0%, var(--klein-blue-light) 100%);
+    background: linear-gradient(135deg, rgba(0, 47, 167, 0.3) 0%, rgba(0, 64, 209, 0.3) 100%);
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
 
