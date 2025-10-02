@@ -285,6 +285,14 @@ class LoadingScreen {
             this.container.style.display = 'none';
             // 启动主菜单
             document.getElementById('mainMenu').style.display = 'flex';
+            
+            // 确保只显示一张游戏卡片
+            const pokerElements = document.querySelectorAll('.poker');
+            pokerElements.forEach((poker, index) => {
+                if (index !== 4) { // 只显示第5张卡片（索引4）
+                    poker.style.display = 'none';
+                }
+            });
         }, 1000);
     }
 }

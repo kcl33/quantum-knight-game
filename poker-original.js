@@ -55,6 +55,11 @@ const poker = {
                     this.navigateToGame(this.games[gameIndex].id);
                 });
             }
+            
+            // 初始化时只显示最后一张卡片（选择游戏卡片）
+            if (index !== 4) {
+                obj.style.display = 'none';
+            }
         });
 
         this.game_index = this.poker_eles.length;
@@ -90,6 +95,13 @@ const poker = {
     },
     
     move() {
+        // 如果之前隐藏了其他卡片，现在显示它们
+        this.poker_eles.forEach((ele, index) => {
+            if (ele.style.display === 'none') {
+                ele.style.display = '';
+            }
+        });
+        
         this.poker_eles.map((ele) => {
             let nums = ele.nums;
             if (nums + 1 >= this.poker_eles.length) {
