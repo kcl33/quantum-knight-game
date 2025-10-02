@@ -286,11 +286,13 @@ class LoadingScreen {
             // 启动主菜单
             document.getElementById('mainMenu').style.display = 'flex';
             
-            // 确保只显示一张游戏卡片
+            // 确保只显示"选择游戏"卡片（索引为3的卡片）
             const pokerElements = document.querySelectorAll('.poker');
             pokerElements.forEach((poker, index) => {
-                if (index !== 4) { // 只显示第5张卡片（索引4）
+                if (index !== 3) {
                     poker.style.display = 'none';
+                } else {
+                    poker.style.display = 'block';
                 }
             });
         }, 1000);

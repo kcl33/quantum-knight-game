@@ -7,28 +7,29 @@ const poker = {
             name: '贪吃蛇',
             icon: '🐍',
             description: '经典的贪吃蛇游戏，控制蛇吃到食物并避免撞到墙壁或自己的身体',
-            color: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)'
+            color: '#002FA7' // 克莱因蓝
         },
         {
             id: 'tetris',
             name: '俄罗斯方块',
             icon: '🧩',
             description: '经典的俄罗斯方块游戏，排列方块消除行数获得高分',
-            color: 'linear-gradient(135deg, #fc466b 0%, #3f5efb 100%)'
+            color: '#FFFFFF' // 白色
         },
         {
             id: 'knight',
             name: '量子骑士',
             icon: '⚔️',
             description: '冒险游戏，控制量子骑士战斗并探索世界',
-            color: 'linear-gradient(135deg, #f46b45 0%, #eea849 100%)'
+            color: '#002FA7' // 克莱因蓝
         },
         {
             id: 'select',
             name: '选择游戏',
             icon: '🎮',
             description: '点击顶部卡片切换游戏',
-            color: 'linear-gradient(135deg, #4b6cb7 0%, #182848 100%)'
+            color: '#FFFFFF', // 白色
+            isSelectCard: true // 标记为选择游戏卡片
         }
     ],
     game_index: 0,
@@ -57,7 +58,7 @@ const poker = {
             }
             
             // 初始化时只显示最后一张卡片（选择游戏卡片）
-            if (index !== 4) {
+            if (index !== 3) {
                 obj.style.display = 'none';
             }
         });
@@ -69,13 +70,27 @@ const poker = {
         const gameIndex = (this.game_index + index) % this.games.length;
         const game = this.games[gameIndex];
         
-        pokerElement.innerHTML = `
-            <div class="game-card" style="background: ${game.color}; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; border-radius: 1.5rem;">
-                <div class="game-icon" style="font-size: 5rem; margin-bottom: 1rem;">${game.icon}</div>
-                <div class="game-title" style="font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem;">${game.name}</div>
-                <div class="game-description" style="font-size: 1rem; padding: 0 1rem; line-height: 1.4;">${game.description}</div>
-            </div>
-        `;
+        // 根据是否为选择游戏卡片应用不同的样式
+        if (game.isSelectCard) {
+            // 选择游戏卡片样式 - 白色背景，克莱因蓝文字
+            pokerElement.innerHTML = `
+                <div class="game-card select-card" style="background: ${game.color}; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-radius: 1.5rem; border: 2px solid #002FA7;">
+                    <div class="game-icon" style="font-size: 5rem; margin-bottom: 1rem; color: #002FA7;">${game.icon}</div>
+                    <div class="game-title" style="font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem; color: #002FA7;">${game.name}</div>
+                    <div class="game-description" style="font-size: 1rem; padding: 0 1rem; line-height: 1.4; color: #1A1A1A;">${game.description}</div>
+                </div>
+            `;
+        } else {
+            // 普通游戏卡片样式 - 克莱因蓝背景，白色文字
+            const textColor = game.color === '#FFFFFF' ? '#002FA7' : '#FFFFFF'; // 如果背景是白色，文字用克莱因蓝
+            pokerElement.innerHTML = `
+                <div class="game-card regular-card" style="background: ${game.color}; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-radius: 1.5rem; border: 1px solid ${game.color === '#FFFFFF' ? '#002FA7' : 'transparent'};">
+                    <div class="game-icon" style="font-size: 5rem; margin-bottom: 1rem; color: ${textColor};">${game.icon}</div>
+                    <div class="game-title" style="font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem; color: ${textColor};">${game.name}</div>
+                    <div class="game-description" style="font-size: 1rem; padding: 0 1rem; line-height: 1.4; color: ${textColor};">${game.description}</div>
+                </div>
+            `;
+        }
     },
     
     navigateToGame(gameId) {
