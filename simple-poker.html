@@ -172,34 +172,46 @@
             const gameCards = document.querySelectorAll('.poker:not(.poker-select)');
             const selectCard = document.getElementById('selectCard');
             
-            // 1. 点击选择游戏卡片 - 变灰效果
+            // 1. 点击选择游戏卡片 - 变灰效果并移动其他卡片
             selectCard.addEventListener('click', function() {
                 // 添加变灰效果
                 this.classList.add('grayed');
                 
-                // 200毫秒后恢复
+                // 移动最前面的游戏卡片到选择卡片下方
+                const frontCard = document.querySelector('.poker3'); // 中间的卡片是最前面的
+                if (frontCard) {
+                    // 保存原始样式和位置
+                    const originalTransform = frontCard.style.transform;
+                    const originalClass = frontCard.className;
+                    
+                    // 移动到选择卡片下方
+                    frontCard.classList.add('poker-under-select');
+                    
+                    // 1秒后恢复原始位置
+                    setTimeout(() => {
+                        frontCard.classList.remove('poker-under-select');
+                        frontCard.className = originalClass;
+                        frontCard.style.transform = originalTransform;
+                    }, 1000);
+                }
+                
+                // 200毫秒后恢复变灰效果
                 setTimeout(() => {
                     this.classList.remove('grayed');
                 }, 200);
             });
             
-            // 2. 点击其他游戏卡片 - 移动到选择卡片下方
+            // 2. 点击其他游戏卡片 - 只有点击效果，不移动
             gameCards.forEach(card => {
                 card.addEventListener('click', function() {
-                    // 保存原始样式和位置
+                    // 添加点击效果
                     const originalTransform = this.style.transform;
-                    const originalClass = this.className;
-                    const originalParent = this.parentNode;
+                    this.style.transform = originalTransform + ' scale(0.95)';
                     
-                    // 移动到选择卡片下方
-                    this.classList.add('poker-under-select');
-                    
-                    // 1秒后恢复原始位置
+                    // 200毫秒后恢复
                     setTimeout(() => {
-                        this.classList.remove('poker-under-select');
-                        this.className = originalClass;
                         this.style.transform = originalTransform;
-                    }, 1000);
+                    }, 200);
                 });
             });
             
