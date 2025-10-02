@@ -2115,42 +2115,31 @@ kbd:hover {
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 47, 167, 0.8);
+    background: rgba(0, 31, 122, 0.95);
     border: 1px solid var(--electric-blue);
-    border-radius: 15px;
+    border-radius: 4px;
     padding: 15px;
     color: var(--primary-white);
     font-size: 14px;
     z-index: 100;
-    box-shadow: 0 0 20px rgba(0, 180, 255, 0.4);
     writing-mode: vertical-rl;
     text-orientation: mixed;
     max-width: 40px;
     text-align: center;
     overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.hotkeys:hover {
-    max-width: 200px;
-    writing-mode: horizontal-tb;
-    right: 20px;
-    top: auto;
-    bottom: 20px;
-    transform: none;
-    padding: 15px 20px;
+    box-shadow: none;
 }
 
 .hotkeys kbd {
-    background: linear-gradient(135deg, var(--klein-blue), var(--electric-blue));
+    background: var(--klein-blue);
     color: var(--primary-white);
     padding: 3px 6px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 180, 255, 0.6);
     margin: 0 2px;
-    border: 1px solid var(--energy-yellow);
+    border: 1px solid var(--klein-blue-dark);
+    box-shadow: none;
 }
 
 /* 自定义滚动条样式 */
